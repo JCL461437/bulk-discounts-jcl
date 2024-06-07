@@ -1,7 +1,7 @@
 # Little Esty Shop
 
 ## Database Schema
-<img width="1314" alt="NEWDBSCHEMA" src="https://github.com/JCL461437/little-shop-7/assets/74687494/35d2668f-755b-48cf-941d-9e2a13117917">
+<img width="872" alt="Bulk Discounts Schema" src="https://github.com/JCL461437/bulk-discounts-jcl/assets/161185753/7196535f-e51e-4bee-9654-e0022c6b5f95">
 
 ## Background and Description
 
@@ -21,3 +21,4 @@
 ## Requirements
 - Must use Rails 7.1.x, Ruby 3.2.2
 - Must use PostgreSQL
+
