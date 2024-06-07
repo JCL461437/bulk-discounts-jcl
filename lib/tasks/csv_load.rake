@@ -84,6 +84,14 @@ namespace :csv_load do
       puts "InvoiceItems imported."
    end
 
+   task :bulk_discounts => :environment do
+      CSV.foreach("db/data/bulk_discounts.csv", headers: true) do |row|
+         BulkDiscount.create!(row.to_hash)
+      end
+      ActiveRecord::Base.connection.reset_pk_sequence!("bulk_discounts")
+      puts "BulkDiscounts imported."
+   end
+
    task :all do 
       [:customers, :invoices, :merchants, :items, :invoice_items, :transactions].each do |task|
          Rake::Task["csv_load:#{task}".to_sym].invoke
