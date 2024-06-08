@@ -33,6 +33,12 @@
 </div>
 
 <div>
+  <section id="view_all_discounts">
+    <%= link_to "View All Discounts", "/merchants/#{@merchant.id}/bulk_discounts/index"%>
+  </section>
+</div>
+
+<div>
   <section id="create_new_discount">
     <%= link_to "Create a New Discount", "/merchants/#{@merchant.id}/bulk_discounts/new"%>
   </section>
