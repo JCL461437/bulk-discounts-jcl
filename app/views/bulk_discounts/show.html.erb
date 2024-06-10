@@ -9,7 +9,7 @@
   <p><%= @discount.id %></p><br/>
 
   <p>Quantity Threshold: <%= n@discount.quantity_threshold%></p>
-  <p>Percentage Discount: <%= @discount.percentage_discount %> % </p>
+  <p>Percentage Discount: <%= @discount.percentage_discount.to_i %> % </p>
 
   <strong><%= link_to "Update Item", edit_merchant_item_path(@merchant, @item) %></strong>
 
