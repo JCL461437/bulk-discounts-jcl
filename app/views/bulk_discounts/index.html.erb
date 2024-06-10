@@ -1,0 +1,16 @@
+<%= render partial: "shared/adminnav" %>
+
+
+<div class="row">
+  <div class="col-sm-12 admin column-header">
+    <p class="mr-auto">Bulk Discounts</p>
+  </div>
+
+  <% @discounts.each do |discount| %>
+    <li> <%= link_to "Discount #{discount.id}", merchant_bulk_discount_path(discount.merchant, discount) %></li>
+    <p> Percentage Discount: <%= "#{discount.percentage_discount.to_i}" %>%</p>
+    <p> Quantity Threshold: <%= "#{discount.quantity_threshold}" %></p>
+  <% end %>
+
+</div>
+
