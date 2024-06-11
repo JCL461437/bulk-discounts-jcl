@@ -73,4 +73,12 @@ describe "bulk discounts index" do
     
     expect(page).to_not have_content(@discount4.name)
   end
+
+  it "shows a link to make a new discount" do
+    visit merchant_bulk_discounts_path(@merchant1)
+    
+    expect(current_path).to eq("/merchants/#{@merchant1.id}/bulk_discounts")
+
+    expect(page).to have_link("Create a New Discount")
+  end
 end

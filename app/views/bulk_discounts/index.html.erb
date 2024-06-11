@@ -12,5 +12,11 @@
     <p> Quantity Threshold: <%= "#{discount.quantity_threshold}" %></p>
   <% end %>
 
+  <div>
+    <section id="create_new_discount">
+      <h5><%= link_to "Create a New Discount", new_merchant_bulk_discount_path(@merchant) %></h5>
+    </section>
+  </div>
+
 </div>
 
