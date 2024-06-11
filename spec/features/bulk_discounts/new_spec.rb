@@ -1,6 +1,6 @@
 require "rails_helper"
 
-describe "bulk discounts new page" do
+RSpec.describe "bulk discounts new page" do
   before :each do
   end
 

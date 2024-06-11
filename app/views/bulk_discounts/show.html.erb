@@ -6,4 +6,10 @@
   <p>Quantity Threshold: <%= @discount.quantity_threshold%></p>
   <p>Percentage Discount: <%= @discount.percentage_discount.to_i %> % </p>
 
+  <div>
+    <section id="edit_discount">
+      <h5><%= link_to "Edit This Discount", edit_merchant_bulk_discount_path(@merchant, @discount) %></h5>
+    </section>
+  </div>
+
 </body>
