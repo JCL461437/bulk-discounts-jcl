@@ -7,9 +7,12 @@
   </div>
 
   <% @discounts.each do |discount| %>
-    <li> <%= link_to "Discount #{discount.id}", merchant_bulk_discount_path(discount.merchant, discount) %></li>
-    <p> Percentage Discount: <%= "#{discount.percentage_discount.to_i}" %>%</p>
-    <p> Quantity Threshold: <%= "#{discount.quantity_threshold}" %></p>
+    <section id="discount_<%=discount.id%>">
+      <li> <%= link_to "Discount #{discount.id}", merchant_bulk_discount_path(discount.merchant, discount) %></li>
+      <p> Percentage Discount: <%= "#{discount.percentage_discount.to_i}" %>%</p>
+      <p> Quantity Threshold: <%= "#{discount.quantity_threshold}" %></p>
+      <p><%= button_to 'Delete Discount', merchant_bulk_discount_path(discount.merchant, discount), method: :delete, data: { confirm: 'Are you sure?' } %><p>
+    </section>
   <% end %>
 
   <div>
