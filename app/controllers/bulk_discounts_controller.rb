@@ -25,6 +25,12 @@ class BulkDiscountsController< ApplicationController
     end
   end
 
+  def destroy
+    @bulk_discount = @merchant.bulk_discounts.find(params[:id])
+    @bulk_discount.destroy
+    redirect_to merchant_bulk_discounts_path(@merchant), notice: 'Bulk discount was successfully deleted.'
+  end
+
   private
 
   def set_merchant

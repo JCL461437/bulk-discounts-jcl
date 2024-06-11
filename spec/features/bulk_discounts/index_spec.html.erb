@@ -51,11 +51,11 @@ describe "bulk discounts index" do
     @transaction7 = Transaction.create!(credit_card_number: 203942, result: 1, invoice_id: @invoice_7.id)
     @transaction8 = Transaction.create!(credit_card_number: 203942, result: 1, invoice_id: @invoice_8.id)
 
-    @discount1 = Transaction.create!(percentage_discount: 20, quantity_threshold: 5, merchant_id: @merchant_1.id)
-    @discount2 = Transaction.create!(percentage_discount: 5, quantity_threshold: 2, merchant_id: @merchant_1.id)
-    @discount3 = Transaction.create!(percentage_discount: 10, quantity_threshold: 4, merchant_id: @merchant_1.id)
-    @discount4 = Transaction.create!(percentage_discount: 10, quantity_threshold: 4, merchant_id: @merchant_2.id)
-    @discount5 = Transaction.create!(percentage_discount: 5, quantity_threshold: 2, merchant_id: @merchant_2.id)
+    @discount1 = BulkDiscount.create!(percentage_discount: 20, quantity_threshold: 5, merchant_id: @merchant1.id)
+    @discount2 = BulkDiscount.create!(percentage_discount: 5, quantity_threshold: 2, merchant_id: @merchant1.id)
+    @discount3 = BulkDiscount.create!(percentage_discount: 10, quantity_threshold: 4, merchant_id: @merchant1.id)
+    @discount4 = BulkDiscount.create!(percentage_discount: 10, quantity_threshold: 4, merchant_id: @merchant2.id)
+    @discount5 = BulkDiscount.create!(percentage_discount: 5, quantity_threshold: 2, merchant_id: @merchant2.id)
   end
 
   it "can display all bulk discounts on my index view" do
@@ -67,11 +67,11 @@ describe "bulk discounts index" do
 
     visit merchant_bulk_discounts_path(@merchant1)
 
-    expect(page).to have_content(@discount1.name)
-    expect(page).to have_content(@discount2.name)
-    expect(page).to have_content(@discount3.name)
+    expect(page).to have_content("Discount #{@discount1.id}")
+    expect(page).to have_content("Discount #{@discount2.id}")
+    expect(page).to have_content("Discount #{@discount3.id}")
     
-    expect(page).to_not have_content(@discount4.name)
+    expect(page).to_not have_content("Discount #{@discount4.id}")
   end
 
   it "shows a link to make a new discount" do
@@ -80,5 +80,28 @@ describe "bulk discounts index" do
     expect(current_path).to eq("/merchants/#{@merchant1.id}/bulk_discounts")
 
     expect(page).to have_link("Create a New Discount")
+  end
+
+  it "has a button to delete each bulk discount next to it" do
+    visit merchant_bulk_discounts_path(@merchant1)
+    
+    expect(current_path).to eq("/merchants/#{@merchant1.id}/bulk_discounts")
+
+    expect(page).to have_content("Discount #{@discount1.id}")
+    expect(page).to have_content("Discount #{@discount2.id}")
+    expect(page).to have_content("Discount #{@discount3.id}")
+    
+    expect(page).to_not have_content("Discount #{@discount4.id}")
+
+    within ("#discount_#{@discount1.id}") do
+      expect(page).to have_content("Discount #{@discount1.id}")
+      
+      click_button 'Delete Discount'
+      
+      visit merchant_bulk_discounts_path(@merchant1)
+
+    end
+
+    expect(page).to_not have_content("Discount #{@discount1.id}")
   end
 end
