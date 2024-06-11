@@ -1,6 +1,6 @@
 require "rails_helper"
 
-describe "bulk discounts index" do
+RSpec.describe "bulk discounts index" do
   before :each do
     @merchant1 = Merchant.create!(name: "Hair Care")
     @merchant2 = Merchant.create!(name: "Jewelry")

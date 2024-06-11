@@ -17,7 +17,7 @@ class BulkDiscountsController< ApplicationController
 
   def update
     if @bulk_discount.update(bulk_discount_params)
-      redirect_to merchant_bulk_discount_path(@bulk_discount), notice: 'Bulk discount was successfully updated.'
+      redirect_to merchant_bulk_discount_path(@merchant, @bulk_discount), notice: 'Bulk discount was successfully updated.'
     else
       render :edit
     end
