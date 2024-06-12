@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "invoices show" do
+RSpec.describe "Invoices Show" do
   before :each do
     @merchant1 = Merchant.create!(name: "Hair Care")
     @merchant2 = Merchant.create!(name: "Jewelry")
@@ -51,6 +51,12 @@ RSpec.describe "invoices show" do
     @transaction6 = Transaction.create!(credit_card_number: 879799, result: 0, invoice_id: @invoice_6.id)
     @transaction7 = Transaction.create!(credit_card_number: 203942, result: 1, invoice_id: @invoice_7.id)
     @transaction8 = Transaction.create!(credit_card_number: 203942, result: 1, invoice_id: @invoice_8.id)
+
+    @discount1 = BulkDiscount.create!(percentage_discount: 20, quantity_threshold: 5, merchant_id: @merchant1.id)
+    @discount2 = BulkDiscount.create!(percentage_discount: 5, quantity_threshold: 2, merchant_id: @merchant1.id)
+    @discount3 = BulkDiscount.create!(percentage_discount: 10, quantity_threshold: 4, merchant_id: @merchant1.id)
+    @discount4 = BulkDiscount.create!(percentage_discount: 10, quantity_threshold: 4, merchant_id: @merchant2.id)
+    @discount5 = BulkDiscount.create!(percentage_discount: 5, quantity_threshold: 2, merchant_id: @merchant2.id)
   end
 
   it "shows the invoice information" do
@@ -76,7 +82,6 @@ RSpec.describe "invoices show" do
     expect(page).to have_content(@ii_1.quantity)
     expect(page).to have_content(@ii_1.unit_price)
     expect(page).to_not have_content(@ii_4.unit_price)
-
   end
 
   it "shows the total revenue for this invoice" do
@@ -100,4 +105,15 @@ RSpec.describe "invoices show" do
     end
   end
 
+  it "shows the total revenue for my merchant from this invoice" do
+    visit merchant_invoice_path(@merchant1, @invoice_1)
+    save_and_open_page
+    expect(page).to have_content("Total Revenue: 186")
+  end
+
+  it "shows the total discounted revenue for my merchant from this invoice" do
+    visit merchant_invoice_path(@merchant1, @invoice_1)
+    
+    expect(page).to have_content("Total Discounted Revenue: 146.80")
+  end
 end
