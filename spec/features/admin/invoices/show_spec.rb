@@ -69,4 +69,20 @@ describe "Admin Invoices Index Page" do
       expect(@i1.status).to eq("completed")
     end
   end
+
+  it "displays the invoice with total revenue and total discounted revenue" do
+    merchant = Merchant.create!(name: "Test Merchant")
+    customer = Customer.create!(first_name: "Joey", last_name: "Smith")
+    invoice = Invoice.create!(customer: customer, status: 2)
+    item = Item.create!(name: "Shampoo", description: "This washes your hair", unit_price: 1000, merchant: merchant)
+    InvoiceItem.create!(item: item, quantity: 10, unit_price: 1000, invoice: invoice, status: 2)
+
+    BulkDiscount.create!(percentage_discount: 10, quantity_threshold: 5, merchant: merchant)
+    BulkDiscount.create!(percentage_discount: 20, quantity_threshold: 10, merchant: merchant)
+
+    visit admin_invoice_path(invoice)
+    
+    expect(page).to have_content("Total Revenue: $10,000.00")
+    expect(page).to have_content("Total Discounted Revenue: $80.00")
+  end
 end
