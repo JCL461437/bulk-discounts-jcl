@@ -11,11 +11,11 @@
   <br>
 
   <p> Created on: <%= @invoice.created_at.strftime("%A, %B %-d, %Y") %></p>
-  <p>Total Revenue: <%= @invoice.total_revenue %></p>
-
+  <p id="total-revenue">Total Revenue: <%= @total_revenue %></p>
+  <p id="total-discounted-revenue">Total Discounted Revenue: <%= @total_discounted_revenue %></p>
 
   <h4>Customer:</h4>
-    <%= @customer.first_name %> <%= @customer.last_name %><br>
+  <%= @customer.first_name %> <%= @customer.last_name %><br>
   <br>
   <br>
   <h4>Items on this Invoice:</h4>
@@ -41,7 +41,7 @@
                 <%= f.select :status, Invoice.statuses.keys, selected: "#{@invoice.status}" %>
                 <%= f.submit 'Update Invoice' %>
               <% end %>
-              </td>
+            </td>
           </tr>
         </section>
       <% end %>
