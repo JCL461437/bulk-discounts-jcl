@@ -24,44 +24,50 @@ RSpec.describe Invoice, type: :model do
 
   describe "instance methods" do
     it "calculates total revenue" do
-      @merchant1 = Merchant.create!(name: 'Hair Care')
-      @item_1 = Item.create!(name: "Shampoo", description: "This washes your hair", unit_price: 10, merchant_id: @merchant1.id, status: 1)
-      @item_8 = Item.create!(name: "Butterfly Clip", description: "This holds up your hair but in a clip", unit_price: 5, merchant_id: @merchant1.id)
-      @customer_1 = Customer.create!(first_name: 'Joey', last_name: 'Smith')
-      @invoice_1 = Invoice.create!(customer_id: @customer_1.id, status: 2, created_at: "2012-03-27 14:54:09")
-      @ii_1 = InvoiceItem.create!(invoice_id: @invoice_1.id, item_id: @item_1.id, quantity: 9, unit_price: 10, status: 2)
-      @ii_11 = InvoiceItem.create!(invoice_id: @invoice_1.id, item_id: @item_8.id, quantity: 1, unit_price: 10, status: 1)
-
-      expect(@invoice_1.total_revenue).to eq(100)
-    end
-  end
-
-  describe "#total_discounted_revenue" do
-    it "calculates total discounted revenue correctly" do
+      merchant1 = Merchant.create!(name: 'Hair Care')
+      item_1 = Item.create!(name: "Shampoo", description: "This washes your hair", unit_price: 10, merchant_id: merchant1.id, status: 1)
+      item_2 = Item.create!(name: "Butterfly Clip", description: "This holds up your hair but in a clip", unit_price: 5, merchant_id: merchant1.id)
       customer_1 = Customer.create!(first_name: 'Joey', last_name: 'Smith')
-      invoice = Invoice.create!(customer: customer_1, status: 2)
+      invoice_1 = Invoice.create!(customer_id: customer_1.id, status: 2, created_at: "2012-03-27 14:54:09")
+      InvoiceItem.create!(invoice_id: invoice_1.id, item_id: item_1.id, quantity: 9, unit_price: 10, status: 2)
+      InvoiceItem.create!(invoice_id: invoice_1.id, item_id: item_2.id, quantity: 1, unit_price: 10, status: 1)
 
-      invoice_item1 = InvoiceItem.create!(item: @item1, quantity: 12, unit_price: 10, invoice: invoice)
-      invoice_item2 = InvoiceItem.create!(item: @item2, quantity: 8, unit_price: 15, invoice: invoice)
-
-      total_revenue = invoice.total_revenue
-      total_discounted_revenue = invoice.total_discounted_revenue
-
-      expected_discounted_revenue = total_revenue - ((12 * 10 * (20 / 100.0)) + (8 * 15 * (15 / 100.0)))
-
-      expect(total_discounted_revenue).to eq(expected_discounted_revenue)
+      expect(invoice_1.total_revenue).to eq(100)
     end
 
-    it "does not return negative total discounted revenue" do
-      customer_1 = Customer.create!(first_name: 'Joey', last_name: 'Smith')
-      invoice = Invoice.create!(customer: customer_1, status: 2)
+    describe "#total_discounted_revenue" do
+      it "calculates total discounted revenue correctly" do
+        customer_1 = Customer.create!(first_name: 'Joey', last_name: 'Smith')
+        invoice = Invoice.create!(customer: customer_1, status: 2)
 
-      invoice_item1 = InvoiceItem.create!(item: @item1, quantity: 5, unit_price: 10, invoice: invoice)
-      invoice_item2 = InvoiceItem.create!(item: @item2, quantity: 8, unit_price: 15, invoice: invoice)
+        item1 = Item.create!(name: "Shampoo", description: "This washes your hair", unit_price: 10, merchant_id: @merchant.id, status: 1)
+        item2 = Item.create!(name: "Conditioner", description: "This makes your hair shiny", unit_price: 15, merchant_id: @merchant.id, status: 1)
 
-      allow(invoice).to receive(:total_discount).and_return(invoice.total_revenue + 100) # Simulate a large discount
+        InvoiceItem.create!(item: item1, quantity: 12, unit_price: 10, invoice: invoice, status: 2)
+        InvoiceItem.create!(item: item2, quantity: 8, unit_price: 15, invoice: invoice, status: 2)
 
-      expect(invoice.total_discounted_revenue).to eq(0)
+        total_revenue = invoice.total_revenue
+        total_discounted_revenue = invoice.total_discounted_revenue
+
+        expected_discounted_revenue = total_revenue - ((12 * 10 * (20 / 100.0)) + (8 * 15 * (15 / 100.0)))
+
+        expect(total_discounted_revenue).to eq(expected_discounted_revenue)
+      end
+
+      it "does not return negative total discounted revenue" do
+        customer_1 = Customer.create!(first_name: 'Joey', last_name: 'Smith')
+        invoice = Invoice.create!(customer: customer_1, status: 2)
+
+        item1 = Item.create!(name: "Shampoo", description: "This washes your hair", unit_price: 10, merchant_id: @merchant.id, status: 1)
+        item2 = Item.create!(name: "Conditioner", description: "This makes your hair shiny", unit_price: 15, merchant_id: @merchant.id, status: 1)
+
+        InvoiceItem.create!(item: item1, quantity: 5, unit_price: 10, invoice: invoice, status: 2)
+        InvoiceItem.create!(item: item2, quantity: 8, unit_price: 15, invoice: invoice, status: 2)
+
+        allow(invoice).to receive(:total_discount).and_return(invoice.total_revenue + 100) # Simulate a large discount
+
+        expect(invoice.total_discounted_revenue).to eq(0)
+      end
     end
   end
 end
