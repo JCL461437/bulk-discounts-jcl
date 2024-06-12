@@ -41,8 +41,11 @@ RSpec.describe Invoice, type: :model do
       customer_1 = Customer.create!(first_name: 'Joey', last_name: 'Smith')
       invoice = Invoice.create!(customer: customer_1, status: 2)
 
-      invoice_item1 = InvoiceItem.create!(item: @item1, quantity: 12, unit_price: 10, invoice: invoice)
-      invoice_item2 = InvoiceItem.create!(item: @item2, quantity: 8, unit_price: 15, invoice: invoice)
+      item1 = Item.create!(name: "Shampoo", description: "This washes your hair", unit_price: 10, merchant_id: @merchant1.id, status: 1)
+      item2 = Item.create!(name: "Shampoo", description: "This washes your hair", unit_price: 10, merchant_id: @merchant1.id, status: 1)
+
+      invoice_item1 = InvoiceItem.create!(item: item1, quantity: 12, unit_price: 10, invoice: invoice)
+      invoice_item2 = InvoiceItem.create!(item: item2, quantity: 8, unit_price: 15, invoice: invoice)
 
       total_revenue = invoice.total_revenue
       total_discounted_revenue = invoice.total_discounted_revenue
