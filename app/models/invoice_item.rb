@@ -26,4 +26,11 @@ class InvoiceItem < ApplicationRecord
       0
     end
   end
+
+  def best_bulk_discount
+    item.merchant.bulk_discounts
+        .where('quantity_threshold <= ?', quantity)
+        .order(percentage_discount: :desc)
+        .first
+  end
 end
